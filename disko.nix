@@ -96,16 +96,16 @@
 
           "safe/home" = {
             type = "zfs_fs";
-            options.mountpoint = "legacy";
+            options = {
+		        mountpoint = "legacy";
+	        "com.sun:auto-snapshot" = "true";
+	    };
             mountpoint = "/home";
           };
 
           "safe/persistent" = {
             type = "zfs_fs";
-            options = {
-              mountpoint = "legacy";
-              "com.sun:auto-snapshot" = "true";
-            };
+            options.mountpoint = "legacy";
             mountpoint = "/persistent";
           };
 
