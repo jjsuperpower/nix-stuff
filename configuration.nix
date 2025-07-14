@@ -17,13 +17,13 @@ in
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-#   imports =
-#     [ # Include the results of the hardware scan.
-#       ./hardware-configuration.nix
-#     ];
+  #   imports =
+  #     [ # Include the results of the hardware scan.
+  #       ./hardware-configuration.nix
+  #     ];
 
   # Bootloader.
-#   boot.loader.systemd-boot.enable = true;   # requires grub for using zfs
+  #   boot.loader.systemd-boot.enable = true;   # requires grub for using zfs
   #boot.loader.efi.canTouchEfiVariables = true;
 
   # zfs mount stuff
@@ -34,14 +34,14 @@ in
     efiSupport = true;
     efiInstallAsRemovable = true;
     mirroredBoots = [
-     { devices = [ "nodev"]; path = "/boot"; }
+      { devices = [ "nodev" ]; path = "/boot"; }
     ];
   };
 
   boot.kernelParams = [ "nohibernate" ];
   boot.initrd.postMountCommands = lib.mkAfter ''
-      zfs rollback -r zroot/root@blank;
-      mkdir /mnt
+    zfs rollback -r zroot/root@blank;
+    mkdir /mnt
   '';
 
   fileSystems = {
@@ -54,21 +54,21 @@ in
     "/var/log".neededForBoot = true;
 
   };
-#   swapDevices = [];
+  #   swapDevices = [];
   services.zfs.autoScrub.enable = true;
   services.zfs.autoSnapshot.enable = true;
-#   services.zfs-mount.enable = false;
+  #   services.zfs-mount.enable = false;
 
 
 
-  
-# Enable OpenGL
+
+  # Enable OpenGL
   hardware.graphics = {
     enable = true;
   };
 
   # Load nvidia driver for Xorg and Wayland
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
 
@@ -141,7 +141,7 @@ in
   services.desktopManager.plasma6.enable = true;
 
   # Configure keymap in X    11
-  services.xserver.xkb =     {
+  services.xserver.xkb = {
     layout = "us";
     variant = "";
   };
@@ -175,7 +175,7 @@ in
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
       kdePackages.kate
-    #  thunderbird
+      #  thunderbird
     ];
   };
 
@@ -188,56 +188,56 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-	vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
- 	kdePackages.discover # Optional: Install if you use Flatpak or fwupd firmware update sevice
-         kdePackages.kcalc # Calculator
-         kdePackages.kcharselect # Tool to select and copy special characters from all installed fonts
-         kdePackages.kcolorchooser # A small utility to select a color
-         kdePackages.kolourpaint # Easy-to-use paint program
-         kdePackages.ksystemlog # KDE SystemLog Application
-         kdePackages.sddm-kcm # Configuration module for SDDM
-         kdiff3 # Compares and merges 2 or 3 files or directories
-         kdePackages.isoimagewriter # Optional: Program to write hybrid ISO files onto USB disks
-         kdePackages.partitionmanager # Optional Manage the disk devices, partitions and file systems on your computer
-         hardinfo2 # System information and benchmarks for Linux systems
-         haruna # Open source video player built with Qt/QML and libmpv
-         wayland-utils # Wayland utilities
-         wl-clipboard # Command-line copy/paste utilities for Wayland
+    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    kdePackages.discover # Optional: Install if you use Flatpak or fwupd firmware update sevice
+    kdePackages.kcalc # Calculator
+    kdePackages.kcharselect # Tool to select and copy special characters from all installed fonts
+    kdePackages.kcolorchooser # A small utility to select a color
+    kdePackages.kolourpaint # Easy-to-use paint program
+    kdePackages.ksystemlog # KDE SystemLog Application
+    kdePackages.sddm-kcm # Configuration module for SDDM
+    kdiff3 # Compares and merges 2 or 3 files or directories
+    kdePackages.isoimagewriter # Optional: Program to write hybrid ISO files onto USB disks
+    kdePackages.partitionmanager # Optional Manage the disk devices, partitions and file systems on your computer
+    hardinfo2 # System information and benchmarks for Linux systems
+    haruna # Open source video player built with Qt/QML and libmpv
+    wayland-utils # Wayland utilities
+    wl-clipboard # Command-line copy/paste utilities for Wayland
 
- 	git
-	wget
- 	discord-canary
- 	stacer
- 	htop
- 	krita
- 	zed-editor
- 	obsidian
- 	meld
- 	vscode
- 	rustdesk
- 	corectrl
- 	flatpak
- 	python313
- 	python313Packages.python-pipedrive
- 	gparted
- 	gnome-disk-utility
- 	gparted
- 	rustup
- 	gcc
- 	glib
- 	lm_sensors
- 	coolercontrol.coolercontrol-gui
- 	coolercontrol.coolercontrold
- 	coolercontrol.coolercontrol-liqctld
- 	prometheus-nvidia-gpu-exporter
- 	peek
- 	cheese
- 	kicad
- 	freecad-wayland
- 	spotify
-        cryptsetup
-	sudo-rs
-	zsh
+    git
+    wget
+    discord-canary
+    stacer
+    htop
+    krita
+    zed-editor
+    obsidian
+    meld
+    vscode
+    rustdesk
+    corectrl
+    flatpak
+    python313
+    python313Packages.python-pipedrive
+    gparted
+    gnome-disk-utility
+    gparted
+    rustup
+    gcc
+    glib
+    lm_sensors
+    coolercontrol.coolercontrol-gui
+    coolercontrol.coolercontrold
+    coolercontrol.coolercontrol-liqctld
+    prometheus-nvidia-gpu-exporter
+    peek
+    cheese
+    kicad
+    freecad-wayland
+    spotify
+    cryptsetup
+    sudo-rs
+    zsh
   ];
 
   # sudo stuff
@@ -246,8 +246,8 @@ in
 
   #cooler control
   programs.coolercontrol.enable = true;
-  programs.coolercontrol.nvidiaSupport = true;  
-  boot.kernelModules = [ "nct6775" "lm75" ];  # needed for sensors
+  programs.coolercontrol.nvidiaSupport = true;
+  boot.kernelModules = [ "nct6775" "lm75" ]; # needed for sensors
 
   # flatpak
   services.flatpak.enable = true;
@@ -255,8 +255,8 @@ in
 
   # docker
   virtualisation.docker.enable = true;
-  
-  
+
+
   # steam install
   programs.steam = {
     enable = true;
@@ -265,7 +265,7 @@ in
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
 
-  
+
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -305,17 +305,17 @@ in
     # BUS_MODULES for any required bus driver module (for example for I2C or SPI).
     
     HWMON_MODULES="lm75 nct6775"
-   ''; 
+  '';
 
 
-   # impermanence stuff
-#    security.sudo-rs.extraConfig = ''
-#     # Rollback results in sudo lectures after each reboot
-#     Defaults lecture = false
-#   '';
+  # impermanence stuff
+  #    security.sudo-rs.extraConfig = ''
+  #     # Rollback results in sudo lectures after each reboot
+  #     Defaults lecture = false
+  #   '';
 
-   environment.persistence."/persistent" = {
-    enable = true;  # NB: Defaults to true, not needed
+  environment.persistence."/persistent" = {
+    enable = true; # NB: Defaults to true, not needed
     hideMounts = true;
     directories = [
       "/etc/nixos"
@@ -326,10 +326,10 @@ in
     ];
     files = [
       "/etc/machine-id"
-#       { file = "/etc/passwd"; force = true; mode = "u=rw,g=r,o=r";}
-#       { file = "/etc/group"; force = true; mode = "u=rw,g=r,o=r";}
-#       { file = "/etc/shadow"; force = true; mode = "u=rw,g=r,o=";}
-    ]; 
+      #       { file = "/etc/passwd"; force = true; mode = "u=rw,g=r,o=r";}
+      #       { file = "/etc/group"; force = true; mode = "u=rw,g=r,o=r";}
+      #       { file = "/etc/shadow"; force = true; mode = "u=rw,g=r,o=";}
+    ];
   };
 
 

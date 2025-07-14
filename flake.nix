@@ -9,15 +9,15 @@
     nixos-facter-modules.url = "github:numtide/nixos-facter-modules";
   };
 
-  outputs = inputs @ {
-      nixpkgs,
-      disko,
-      nixos-facter-modules,
-      impermanence,
-      ...
+  outputs =
+    inputs @ { nixpkgs
+    , disko
+    , nixos-facter-modules
+    , impermanence
+    , ...
     }:
-  {
-    nixosConfigurations.enterprise = nixpkgs.lib.nixosSystem {
+    {
+      nixosConfigurations.enterprise = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           disko.nixosModules.disko
@@ -27,6 +27,6 @@
           { config.facter.reportPath = ./facter.json; }
         ];
         specialArgs = { inherit inputs; };
+      };
     };
-  };
 }

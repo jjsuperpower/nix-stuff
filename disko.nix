@@ -53,7 +53,8 @@
         options.ashift = "12";
 
         datasets = {
-          "reserved" = {    # keep zfs performance good
+          "reserved" = {
+            # keep zfs performance good
             type = "zfs_fs";
             options = {
               mountpoint = "none";
@@ -90,16 +91,16 @@
           "safe" = {
             type = "zfs_fs";
             options = {
-                mountpoint = "none";
+              mountpoint = "none";
             };
           };
 
           "safe/home" = {
             type = "zfs_fs";
             options = {
-		        mountpoint = "legacy";
-	        "com.sun:auto-snapshot" = "true";
-	    };
+              mountpoint = "legacy";
+              "com.sun:auto-snapshot" = "true";
+            };
             mountpoint = "/home";
           };
 
@@ -109,23 +110,23 @@
             mountpoint = "/persistent";
           };
 
-#           # README MORE: https://wiki.archlinux.org/title/ZFS#Swap_volume
-#           "swap" = {
-#             type = "zfs_volume";
-#             size = "32000M";
-#             content = {
-#               type = "swap";
-#             };
-#             options = {
-#               volblocksize = "4096";
-#               compression = "zle";
-#               logbias = "throughput";
-#               sync = "always";
-#               primarycache = "metadata";
-#               secondarycache = "none";
-#               "com.sun:auto-snapshot" = "false";
-#             };
-#           };
+          #           # README MORE: https://wiki.archlinux.org/title/ZFS#Swap_volume
+          #           "swap" = {
+          #             type = "zfs_volume";
+          #             size = "32000M";
+          #             content = {
+          #               type = "swap";
+          #             };
+          #             options = {
+          #               volblocksize = "4096";
+          #               compression = "zle";
+          #               logbias = "throughput";
+          #               sync = "always";
+          #               primarycache = "metadata";
+          #               secondarycache = "none";
+          #               "com.sun:auto-snapshot" = "false";
+          #             };
+          #           };
         };
       };
     };
