@@ -1,3 +1,3 @@
 #!/run/current-system/sw/bin/bash
 
-sudo nixos-rebuild switch --flake '.#enterprise'
+sudo nixos-rebuild switch --flake 'path://#enterprise'
