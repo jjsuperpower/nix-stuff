@@ -40,7 +40,8 @@ in
 
   boot.kernelParams = [ "nohibernate" ];
   boot.initrd.postMountCommands = lib.mkAfter ''
-      zfs rollback -r zroot/root@blank
+      zfs rollback -r zroot/root@blank;
+      mkdir /mnt
   '';
 
   fileSystems = {
