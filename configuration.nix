@@ -188,52 +188,55 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
 	vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-# 	kdePackages.discover # Optional: Install if you use Flatpak or fwupd firmware update sevice
-#         kdePackages.kcalc # Calculator
-#         kdePackages.kcharselect # Tool to select and copy special characters from all installed fonts
-#         kdePackages.kcolorchooser # A small utility to select a color
-#         kdePackages.kolourpaint # Easy-to-use paint program
-#         kdePackages.ksystemlog # KDE SystemLog Application
-#         kdePackages.sddm-kcm # Configuration module for SDDM
-#         kdiff3 # Compares and merges 2 or 3 files or directories
-#         kdePackages.isoimagewriter # Optional: Program to write hybrid ISO files onto USB disks
-#         kdePackages.partitionmanager # Optional Manage the disk devices, partitions and file systems on your computer
-#         hardinfo2 # System information and benchmarks for Linux systems
-#         haruna # Open source video player built with Qt/QML and libmpv
-#         wayland-utils # Wayland utilities
-#         wl-clipboard # Command-line copy/paste utilities for Wayland
-#
-# 	wget
-# 	discord-canary
-# 	stacer
-# 	htop
-# 	krita
-# 	zed-editor
-# 	obsidian
-# 	meld
-# 	vscode
-# 	rustdesk
-# 	corectrl
-# 	flatpak
-# 	python313
-# 	python313Packages.python-pipedrive
-# 	gparted
-# 	gnome-disk-utility
-# 	gparted
-# 	rustup
-# 	gcc
-# 	glib
-# 	lm_sensors
-# 	coolercontrol.coolercontrol-gui
-# 	coolercontrol.coolercontrold
-# 	coolercontrol.coolercontrol-liqctld
-# 	prometheus-nvidia-gpu-exporter
-# 	peek
-# 	cheese
-# 	kicad
-# 	freecad-wayland
-# 	spotify
+ 	kdePackages.discover # Optional: Install if you use Flatpak or fwupd firmware update sevice
+         kdePackages.kcalc # Calculator
+         kdePackages.kcharselect # Tool to select and copy special characters from all installed fonts
+         kdePackages.kcolorchooser # A small utility to select a color
+         kdePackages.kolourpaint # Easy-to-use paint program
+         kdePackages.ksystemlog # KDE SystemLog Application
+         kdePackages.sddm-kcm # Configuration module for SDDM
+         kdiff3 # Compares and merges 2 or 3 files or directories
+         kdePackages.isoimagewriter # Optional: Program to write hybrid ISO files onto USB disks
+         kdePackages.partitionmanager # Optional Manage the disk devices, partitions and file systems on your computer
+         hardinfo2 # System information and benchmarks for Linux systems
+         haruna # Open source video player built with Qt/QML and libmpv
+         wayland-utils # Wayland utilities
+         wl-clipboard # Command-line copy/paste utilities for Wayland
+
+ 	git
+	wget
+ 	discord-canary
+ 	stacer
+ 	htop
+ 	krita
+ 	zed-editor
+ 	obsidian
+ 	meld
+ 	vscode
+ 	rustdesk
+ 	corectrl
+ 	flatpak
+ 	python313
+ 	python313Packages.python-pipedrive
+ 	gparted
+ 	gnome-disk-utility
+ 	gparted
+ 	rustup
+ 	gcc
+ 	glib
+ 	lm_sensors
+ 	coolercontrol.coolercontrol-gui
+ 	coolercontrol.coolercontrold
+ 	coolercontrol.coolercontrol-liqctld
+ 	prometheus-nvidia-gpu-exporter
+ 	peek
+ 	cheese
+ 	kicad
+ 	freecad-wayland
+ 	spotify
+        cryptsetup
 	sudo-rs
+	zsh
   ];
 
   # sudo stuff
@@ -312,13 +315,13 @@ in
 
    environment.persistence."/persistent" = {
     enable = true;  # NB: Defaults to true, not needed
-    hideMounts = false;
+    hideMounts = true;
     directories = [
       "/etc/nixos"
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
       "/etc/NetworkManager/system-connections"
-      "/root/"
+      "/var/lib/docker"
     ];
     files = [
       "/etc/machine-id"
