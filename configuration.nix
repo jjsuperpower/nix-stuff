@@ -110,6 +110,7 @@ in
 
   # Enable networking
   networking.networkmanager.enable = true;
+  systemd.network.wait-online.enable = false; # Disable wait-online, as it can cause issues with NetworkManager
 
   # Set your time zone.
   time.timeZone = "America/New_York";
