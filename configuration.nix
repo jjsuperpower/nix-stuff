@@ -304,10 +304,10 @@ in
 
 
    # impermanence stuff
-   security.sudo-rs.extraConfig = ''
-    # Rollback results in sudo lectures after each reboot
-    Defaults lecture = never
-  '';
+#    security.sudo-rs.extraConfig = ''
+#     # Rollback results in sudo lectures after each reboot
+#     Defaults lecture = false
+#   '';
 
    environment.persistence."/persistent" = {
     enable = true;  # NB: Defaults to true, not needed
