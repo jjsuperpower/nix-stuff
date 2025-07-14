@@ -237,6 +237,22 @@ in {
     sudo-rs
     zsh
     alejandra
+    pre-commit
+
+    # python packages
+    (pkgs.python313.withPackages (ps:
+      with ps; [
+        pip
+        virtualenv
+        requests
+        numpy
+        pandas
+        matplotlib
+        scikit-learn
+        scikit-image
+        scipy
+        jupyterlab
+      ]))
   ];
 
   # sudo stuff
