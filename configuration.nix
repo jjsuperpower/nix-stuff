@@ -66,6 +66,11 @@ in {
   services.zfs.autoSnapshot.enable = true;
   #   services.zfs-mount.enable = false;
 
+  # minimize swap usage
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 10;
+  };
+
   # Enable OpenGL
   hardware.graphics = {
     enable = true;
@@ -337,10 +342,10 @@ in {
       "/var/lib/systemd/coredump"
       "/etc/NetworkManager/system-connections"
       "/var/lib/docker"
-      "/etc/coolercontrol/config.toml"
     ];
     files = [
       "/etc/machine-id"
+      "/etc.coolercontrol/config.toml"
       #       { file = "/etc/passwd"; force = true; mode = "u=rw,g=r,o=r";}
       #       { file = "/etc/group"; force = true; mode = "u=rw,g=r,o=r";}
       #       { file = "/etc/shadow"; force = true; mode = "u=rw,g=r,o=";}
