@@ -55,6 +55,11 @@ in {
     };
     "/persistent".neededForBoot = true;
     "/var/log".neededForBoot = true;
+
+    "/games" = {
+      device = "games";
+      fsType = "zfs";
+    };
   };
   #   swapDevices = [];
   services.zfs.autoScrub.enable = true;
@@ -332,6 +337,7 @@ in {
       "/var/lib/systemd/coredump"
       "/etc/NetworkManager/system-connections"
       "/var/lib/docker"
+      "/etc/coolercontrol/config.toml"
     ];
     files = [
       "/etc/machine-id"
