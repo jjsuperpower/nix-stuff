@@ -41,7 +41,7 @@ in {
     ];
   };
 
-  boot.kernelParams = ["nohibernate"];
+  boot.kernelParams = ["nohibernate" "zfs.zfs_arc_max=4884901888"];
   boot.initrd.postMountCommands = lib.mkAfter ''
     zfs rollback -r zroot/root@blank;
     mkdir /mnt
@@ -55,11 +55,6 @@ in {
     };
     "/persistent".neededForBoot = true;
     "/var/log".neededForBoot = true;
-
-    "/games" = {
-      device = "games";
-      fsType = "zfs";
-    };
   };
   #   swapDevices = [];
   services.zfs.autoScrub.enable = true;
@@ -248,6 +243,7 @@ in {
     zsh
     alejandra
     pre-commit
+    qidi-slicer-bin
 
     # python packages
     (pkgs.python313.withPackages (ps:
