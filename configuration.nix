@@ -244,6 +244,8 @@ in {
     alejandra
     pre-commit
     qidi-slicer-bin
+    evince
+    cargo-generate
 
     # python packages
     (pkgs.python313.withPackages (ps:
@@ -341,7 +343,7 @@ in {
     ];
     files = [
       "/etc/machine-id"
-      "/etc.coolercontrol/config.toml"
+      "/etc/coolercontrol/config.toml"
       #       { file = "/etc/passwd"; force = true; mode = "u=rw,g=r,o=r";}
       #       { file = "/etc/group"; force = true; mode = "u=rw,g=r,o=r";}
       #       { file = "/etc/shadow"; force = true; mode = "u=rw,g=r,o=";}
