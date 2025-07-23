@@ -353,17 +353,10 @@ in {
       "/var/lib/systemd/coredump"
       "/etc/NetworkManager/system-connections"
       "/var/lib/docker"
+      "/etc/coolercontrol/"
     ];
     files = [
       "/etc/machine-id"
-      {
-        file = "/etc/coolercontrol/config.toml";
-        parentDirectory = {
-          mode = "u=rwx,g=rx,o=x";
-          user = "root";
-          group = "root";
-        };
-      }
       #       { file = "/etc/passwd"; force = true; mode = "u=rw,g=r,o=r";}
       #       { file = "/etc/group"; force = true; mode = "u=rw,g=r,o=r";}
       #       { file = "/etc/shadow"; force = true; mode = "u=rw,g=r,o=";}
