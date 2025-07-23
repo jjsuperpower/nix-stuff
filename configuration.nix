@@ -44,7 +44,6 @@ in {
   boot.kernelParams = ["nohibernate" "zfs.zfs_arc_max=4884901888"];
   boot.initrd.postMountCommands = lib.mkAfter ''
     zfs rollback -r zroot/root@blank;
-    mkdir /mnt
   '';
 
   fileSystems = {
@@ -55,15 +54,29 @@ in {
     };
     "/persistent".neededForBoot = true;
     "/var/log".neededForBoot = true;
+    "/games" = {
+      device = "games";
+      fsType = "zfs";
+      neededForBoot = false;
+      options = [
+        "users"
+        "nofail"
+      ];
+    };
   };
   #   swapDevices = [];
   services.zfs.autoScrub.enable = true;
   services.zfs.autoSnapshot.enable = true;
   #   services.zfs-mount.enable = false;
 
+  # add mnt folder at boot
+  systemd.tmpfiles.rules = [
+    "d /mnt 0755 root root -"
+  ];
+
   # minimize swap usage
   boot.kernel.sysctl = {
-    "vm.swappiness" = 10;
+    "vm.swappiness" = 20;
   };
 
   # Enable OpenGL
@@ -343,7 +356,14 @@ in {
     ];
     files = [
       "/etc/machine-id"
-      "/etc/coolercontrol/config.toml"
+      {
+        file = "/etc/coolercontrol/config.toml";
+        parentDirectory = {
+          mode = "u=rwx,g=rx,o=x";
+          user = "root";
+          group = "root";
+        };
+      }
       #       { file = "/etc/passwd"; force = true; mode = "u=rw,g=r,o=r";}
       #       { file = "/etc/group"; force = true; mode = "u=rw,g=r,o=r";}
       #       { file = "/etc/shadow"; force = true; mode = "u=rw,g=r,o=";}
