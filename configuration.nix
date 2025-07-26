@@ -254,6 +254,7 @@ in {
     cryptsetup
     sudo-rs
     zsh
+    darktable
     alejandra
     pre-commit
     qidi-slicer-bin
