@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     impermanence.url = "github:nix-community/impermanence";
@@ -11,6 +12,7 @@
 
   outputs = inputs @ {
     nixpkgs,
+    nixpkgs-stable,
     disko,
     nixos-facter-modules,
     impermanence,

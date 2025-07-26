@@ -5,9 +5,11 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }: let
   arcMaxMiB = 512;
+  stablePkgs = import inputs.nixpkgs-stable {system = "x86_64-linux";};
 in {
   imports = [
     ./disko.nix
@@ -254,7 +256,6 @@ in {
     cryptsetup
     sudo-rs
     zsh
-    darktable
     alejandra
     pre-commit
     qidi-slicer-bin
@@ -275,6 +276,9 @@ in {
         scipy
         jupyterlab
       ]))
+
+    # stable packages
+    stablePkgs.darktable
   ];
 
   # sudo stuff
