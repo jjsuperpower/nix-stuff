@@ -261,6 +261,9 @@ in {
     qidi-slicer-bin
     evince
     cargo-generate
+    chromium
+    dnsutils
+    signal-desktop
 
     # python packages
     (pkgs.python313.withPackages (ps:
