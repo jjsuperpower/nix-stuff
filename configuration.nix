@@ -264,6 +264,7 @@ in {
     chromium
     dnsutils
     signal-desktop
+    onlyoffice-desktopeditors
 
     # python packages
     (pkgs.python313.withPackages (ps:
