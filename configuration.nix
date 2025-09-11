@@ -221,6 +221,7 @@ in {
     haruna # Open source video player built with Qt/QML and libmpv
     wayland-utils # Wayland utilities
     wl-clipboard # Command-line copy/paste utilities for Wayland
+    pkgs.networkmanager-openvpn
 
     git
     wget
@@ -265,6 +266,7 @@ in {
     dnsutils
     signal-desktop
     onlyoffice-desktopeditors
+    prismlauncher
 
     # python packages
     (pkgs.python313.withPackages (ps:
@@ -363,6 +365,7 @@ in {
       "/etc/NetworkManager/system-connections"
       "/var/lib/docker"
       "/etc/coolercontrol/"
+      "/var/lib/flatpak/"
     ];
     files = [
       "/etc/machine-id"
