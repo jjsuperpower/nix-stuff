@@ -183,6 +183,14 @@ in {
     #media-session.enable = true;
   };
 
+  # vpn stuff
+  services.openvpn.servers = {
+    bitbyteVPN = {
+      config = ''config bitbyte.ovpn '';
+      autoStart = false;
+    };
+  };
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -221,7 +229,6 @@ in {
     haruna # Open source video player built with Qt/QML and libmpv
     wayland-utils # Wayland utilities
     wl-clipboard # Command-line copy/paste utilities for Wayland
-    pkgs.networkmanager-openvpn
 
     git
     wget
