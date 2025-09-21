@@ -266,7 +266,6 @@ in {
     dnsutils
     signal-desktop
     onlyoffice-desktopeditors
-    prismlauncher
 
     # python packages
     (pkgs.python313.withPackages (ps:
@@ -285,6 +284,7 @@ in {
 
     # stable packages
     stablePkgs.darktable
+    stablePkgs.prismlauncher
   ];
 
   # sudo stuff
