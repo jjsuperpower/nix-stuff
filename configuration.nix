@@ -129,6 +129,9 @@ in {
   # Enable networking
   networking.networkmanager.enable = true;
   systemd.network.wait-online.enable = false; # Disable wait-online, as it can cause issues with NetworkManager
+  networking.networkmanager.plugins = with pkgs; [
+    networkmanager-openvpn
+  ];
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -229,6 +232,7 @@ in {
     haruna # Open source video player built with Qt/QML and libmpv
     wayland-utils # Wayland utilities
     wl-clipboard # Command-line copy/paste utilities for Wayland
+    networkmanager-openvpn
 
     git
     wget
