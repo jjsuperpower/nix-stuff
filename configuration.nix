@@ -233,7 +233,7 @@ in {
     wayland-utils # Wayland utilities
     wl-clipboard # Command-line copy/paste utilities for Wayland
     networkmanager-openvpn
-    kdePackages.qtwebsockets # for wallpaper engine to work
+    kdePackages.wallpaper-engine-plugin
 
     git
     wget
@@ -291,7 +291,6 @@ in {
         scikit-image
         scipy
         jupyterlab
-        websockets # needed for wallpaper engine
       ]))
 
     # stable packages
