@@ -233,6 +233,7 @@ in {
     wayland-utils # Wayland utilities
     wl-clipboard # Command-line copy/paste utilities for Wayland
     networkmanager-openvpn
+    kdePackages.qtwebsockets # for wallpaper engine to work
 
     git
     wget
@@ -247,8 +248,6 @@ in {
     rustdesk
     corectrl
     flatpak
-    python313
-    python313Packages.python-pipedrive
     gparted
     gnome-disk-utility
     gparted
@@ -279,10 +278,11 @@ in {
     onlyoffice-desktopeditors
 
     # python packages
-    (pkgs.python313.withPackages (ps:
+    (python313.withPackages (ps:
       with ps; [
         pip
         virtualenv
+        python-pipedrive
         requests
         numpy
         pandas
@@ -291,12 +291,16 @@ in {
         scikit-image
         scipy
         jupyterlab
+        websockets # needed for wallpaper engine
       ]))
 
     # stable packages
     stablePkgs.darktable
     stablePkgs.prismlauncher
   ];
+
+  # exclude packages
+  environment.plasma6.excludePackages = [pkgs.kdePackages.baloo];
 
   # sudo stuff
   security.sudo-rs.enable = true;
