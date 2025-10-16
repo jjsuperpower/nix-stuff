@@ -245,7 +245,7 @@ in {
     obsidian
     meld
     vscode
-    rustdesk
+    rustdesk-flutter
     corectrl
     flatpak
     gparted
