@@ -238,7 +238,7 @@ in {
     git
     wget
     discord-canary
-    stacer
+    # stacer
     htop
     krita
     zed-editor
