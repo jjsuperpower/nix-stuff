@@ -276,6 +276,7 @@ in {
     dnsutils
     signal-desktop
     onlyoffice-desktopeditors
+    virt-viewer
 
     # python packages
     (python313.withPackages (ps:
