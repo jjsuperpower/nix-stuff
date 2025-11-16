@@ -236,6 +236,7 @@ in {
     kdePackages.wallpaper-engine-plugin
 
     git
+    jujutsu
     wget
     discord-canary
     # stacer
