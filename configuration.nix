@@ -246,7 +246,6 @@ in {
     obsidian
     meld
     vscode
-    rustdesk-flutter
     corectrl
     flatpak
     gparted
@@ -258,7 +257,6 @@ in {
     lm_sensors
     coolercontrol.coolercontrol-gui
     coolercontrol.coolercontrold
-    coolercontrol.coolercontrol-liqctld
     prometheus-nvidia-gpu-exporter
     peek
     cheese
@@ -298,6 +296,7 @@ in {
     # stable packages
     stablePkgs.darktable
     stablePkgs.prismlauncher
+    stablePkgs.rustdesk-flutter
   ];
 
   # exclude packages
@@ -309,7 +308,6 @@ in {
 
   #cooler control
   programs.coolercontrol.enable = true;
-  programs.coolercontrol.nvidiaSupport = true;
   boot.kernelModules = ["nct6775" "lm75"]; # needed for sensors
 
   # flatpak
