@@ -239,7 +239,7 @@ in {
     wayland-utils # Wayland utilities
     wl-clipboard # Command-line copy/paste utilities for Wayland
     networkmanager-openvpn
-    # kdePackages.wallpaper-engine-plugin
+    kdePackages.wallpaper-engine-plugin
 
     git
     jujutsu
