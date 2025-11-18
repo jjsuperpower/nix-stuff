@@ -40,7 +40,7 @@
       zroot = {
         type = "zpool";
         rootFsOptions = {
-          mountpoint = "none";
+          mountpoint = "legacy";
           compression = "zstd";
           acltype = "posixacl";
           xattr = "sa";
