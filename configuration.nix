@@ -10,14 +10,29 @@
 }: let
   arcMaxMiB = 512;
   stablePkgs = import inputs.nixpkgs-stable {system = "x86_64-linux";};
+
+  # get latest kernel package that is compatible with zfs
+  zfsCompatibleKernelPackages = lib.filterAttrs (
+    name: kernelPackages:
+    (builtins.match "linux_[0-9]+_[0-9]+" name) != null
+    && (builtins.tryEval kernelPackages).success
+    && (!kernelPackages.${config.boot.zfs.package.kernelModuleAttribute}.meta.broken)
+  ) pkgs.linuxKernel.packages;
+  latestKernelPackage = lib.last (
+    lib.sort (a: b: (lib.versionOlder a.kernel.version b.kernel.version)) (
+      builtins.attrValues zfsCompatibleKernelPackages
+    )
+  );
+
 in {
+  nix.settings.experimental-features = ["nix-command" "flakes"];
   imports = [
     ./disko.nix
     ./startup_sshkey.nix
     ./passwords.nix
   ];
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  boot.kernelPackages = latestKernelPackage;
 
   # zfs mount stuff
   networking.hostId = "e321370e";
