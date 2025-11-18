@@ -19,15 +19,6 @@ in {
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
-  #   imports =
-  #     [ # Include the results of the hardware scan.
-  #       ./hardware-configuration.nix
-  #     ];
-
-  # Bootloader.
-  #   boot.loader.systemd-boot.enable = true;   # requires grub for using zfs
-  #boot.loader.efi.canTouchEfiVariables = true;
-
   # zfs mount stuff
   networking.hostId = "e321370e";
   boot.loader.grub = {
@@ -239,7 +230,6 @@ in {
     jujutsu
     wget
     discord-canary
-    # stacer
     htop
     krita
     zed-editor
@@ -383,9 +373,6 @@ in {
     ];
     files = [
       "/etc/machine-id"
-      #       { file = "/etc/passwd"; force = true; mode = "u=rw,g=r,o=r";}
-      #       { file = "/etc/group"; force = true; mode = "u=rw,g=r,o=r";}
-      #       { file = "/etc/shadow"; force = true; mode = "u=rw,g=r,o=";}
     ];
   };
 }
