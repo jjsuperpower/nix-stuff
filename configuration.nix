@@ -208,6 +208,7 @@ in {
     isNormalUser = true;
     description = "jon";
     extraGroups = ["networkmanager" "wheel" "docker"];
+    shell = pkgs.fish;
     packages = with pkgs; [
       kdePackages.kate
       #  thunderbird
@@ -240,6 +241,18 @@ in {
     wl-clipboard # Command-line copy/paste utilities for Wayland
     networkmanager-openvpn
     kdePackages.wallpaper-engine-plugin
+
+    # fish stuff
+    fishPlugins.done
+    fishPlugins.fzf-fish
+    fishPlugins.forgit
+    fishPlugins.hydro
+    fzf
+    fishPlugins.grc
+    grc
+
+    # terminal stuff
+    starship
 
     git
     jujutsu
@@ -317,6 +330,22 @@ in {
 
   # flatpak
   services.flatpak.enable = true;
+
+  # terminal stuff
+  programs.fish.enable = true;
+  programs.starship.enable = true;
+
+  # make sure emergency bash shells switch to fish
+  # https://nixos.wiki/wiki/Fish
+  programs.bash = {
+    interactiveShellInit = ''
+      if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+      then
+        shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+        exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+      fi
+    '';
+  };
 
   # docker
   virtualisation.docker.enable = true;
