@@ -70,7 +70,11 @@
   home.sessionVariables = {
     EDITOR = "vim";
     PATH = "$PATH:~/.cargo/bin/";
+  };
 
+  # Global shell aliases that work across all shells
+  home.shellAliases = {
+    # You can add additional global aliases here if needed
   };
 
   programs.git = {
@@ -90,7 +94,15 @@
     };
   };
 
-  programs.fish.enable = true;
+  programs.fish = {
+    enable = true;
+    shellAliases = {
+      zyp = ''zypper'';
+      sudo = ''sudo '';
+      tar-c = ''tar -zcvf '';
+      tar-e = ''tar -zxvf '';
+    };
+  };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

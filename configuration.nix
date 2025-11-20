@@ -335,6 +335,9 @@ in {
   programs.fish.enable = true;
   programs.starship.enable = true;
 
+  # setup direnv stuff for vscode + projects
+  # programs.direnv.enable = true;
+
   # make sure emergency bash shells switch to fish
   # https://nixos.wiki/wiki/Fish
   programs.bash = {
