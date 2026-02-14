@@ -262,6 +262,8 @@ in {
     signal-desktop
     onlyoffice-desktopeditors
     virt-viewer
+    orca-slicer
+    r2modman
 
     # python packages
     (python313.withPackages (ps:
