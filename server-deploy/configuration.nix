@@ -25,6 +25,9 @@
       isNormalUser = true;
     };
 
+    # Disable password for sudo
+    security.sudo.wheelNeedsPassword = false;
+
     nix.settings.trusted-users = ["root" "@wheel"];
 
     # Install some packages

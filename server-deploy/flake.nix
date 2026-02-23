@@ -47,7 +47,6 @@
     deploy.nodes.odst1.profiles.system = {
         user = "root";
         sshUser = "admin";
-        sudo = "echo 'password'| sudo -S -u";
         sshOpts = [ "-i" "~/.ssh/server" ];
         path = deployPkgs.deploy-rs.lib.activate.nixos self.nixosConfigurations.odst1;
     };
