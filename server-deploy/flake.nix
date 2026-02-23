@@ -23,33 +23,39 @@
       ];
     };
 
-    nixosConfigurations.odst1 = nixpkgs.lib.nixosSystem {
+    node_config = node_config: nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [ 
         disko.nixosModules.disko
         ./configuration.nix
-        ./nodes/1.nix
-        nixos-facter-modules.nixosModules.facter
-          {
-            config.facter.reportPath =
-              if builtins.pathExists ./facter.json then
-                ./facter.json
-              else
-                throw "Have you forgotten to run nixos-anywhere with `--generate-hardware-config nixos-facter ./facter.json`?";
-          }
+        node_config
+        nixos-facter-modules.nixosModules.facter {
+          config.facter.reportPath =
+            if builtins.pathExists ./facter.json then
+              ./facter.json
+            else
+              throw "Have you forgotten to run nixos-anywhere with `--generate-hardware-config nixos-facter ./facter.json`?";
+        }
       ];
     };
-  in {
 
-    inherit nixosConfigurations;
+    nixosConfigurations.odst1 = node_config ./nodes/1.nix;
+    # nixosConfigurations.odst2 = node_config ./nodes/2.nix;
 
-    deploy.nodes.odst1.hostname = "odst1.jjsuperpower.com";
-    deploy.nodes.odst1.profiles.system = {
+    node_deploy = hostname: {
+      hostname = "${hostname}.jjsuperpower.com";
+      profiles.system = {
         user = "root";
         sshUser = "admin";
         sshOpts = [ "-i" "~/.ssh/server" ];
-        path = deployPkgs.deploy-rs.lib.activate.nixos self.nixosConfigurations.odst1;
+        path = deployPkgs.deploy-rs.lib.activate.nixos nixosConfigurations.${hostname};
+      };
     };
+
+  in {
+
+    deploy.nodes.odst1 = node_deploy "odst1";
+    # deploy.nodes.odst2 = node_deploy "odst2";
 
     checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
   };
