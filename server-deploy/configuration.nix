@@ -15,7 +15,7 @@
 
     time.timeZone = "America/New_York";
     services.xserver.xkb.layout = "us";
-    services.openssh.settings.PermitRootLogin = "yes";
+    services.xe-guest-utilities.enable = true;
 
     # enable docker
     virtualisation.docker.enable = true;
