@@ -1,0 +1,47 @@
+{ config, pkgs, ... }: 
+
+{
+   
+    nix.settings.experimental-features = ["nix-command" "flakes"];
+    
+    imports = [
+        ./disko.nix
+        ./secret.nix
+    ];
+
+    boot.loader.systemd-boot.enable = true;
+    boot.loader.efi.canTouchEfiVariables = true;
+    system.stateVersion = "25.11";
+
+    time.timeZone = "America/New_York";
+    services.xserver.xkb.layout = "us";
+    services.xe-guest-utilities.enable = true;
+
+    # enable docker
+    virtualisation.docker.enable = true;
+
+    users.users."admin" = {
+      extraGroups = [ "wheel" "networkmanager" "sudo" "docker" ];
+      isNormalUser = true;
+    };
+
+    # Disable password for sudo
+    security.sudo.wheelNeedsPassword = false;
+
+    nix.settings.trusted-users = ["root" "@wheel"];
+
+    # Install some packages
+    environment.systemPackages = with pkgs; [
+      xe-guest-utilities
+    ]; 
+ 
+    # Enable the OpenSSH daemon
+    services.openssh = {
+      enable = true;
+      settings = {
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+        PermitRootLogin = "no";
+      };
+    };
+}
