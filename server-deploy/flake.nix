@@ -39,8 +39,8 @@
       ];
     };
 
+    nixosConfigurations.masterchief = node_config ./nodes/0.nix;
     nixosConfigurations.odst1 = node_config ./nodes/1.nix;
-    # nixosConfigurations.odst2 = node_config ./nodes/2.nix;
 
     node_deploy = hostname: {
       hostname = "${hostname}.jjsuperpower.com";
@@ -54,8 +54,10 @@
 
   in {
 
+    inherit nixosConfigurations;
+
+    deploy.nodes.masterchief = node_deploy "masterchief";
     deploy.nodes.odst1 = node_deploy "odst1";
-    # deploy.nodes.odst2 = node_deploy "odst2";
 
     checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
   };
