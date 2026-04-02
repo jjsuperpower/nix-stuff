@@ -196,7 +196,7 @@ in {
   users.users.jon = {
     isNormalUser = true;
     description = "jon";
-    extraGroups = ["networkmanager" "wheel" "docker" "plugdev"];
+    extraGroups = ["networkmanager" "wheel" "docker" "plugdev" "dialout"];
     shell = pkgs.fish;
     packages = with pkgs; [
       kdePackages.kate
