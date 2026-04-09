@@ -90,6 +90,11 @@ in {
     ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374f", MODE="660", GROUP="plugdev", TAG+="uaccess"
     ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3753", MODE="660", GROUP="plugdev", TAG+="uaccess"
     ATTRS{idVendor}=="0483", ATTRS{idProduct}=="3754", MODE="660", GROUP="plugdev", TAG+="uaccess"
+
+    # Digilent USB Devices
+    ATTR{idVendor}=="0403", ATTR{idProduct}=="6010", MODE="0660", GROUP="plugdev"
+    ATTR{idVendor}=="0403", ATTR{idProduct}=="6014", MODE="0660", GROUP="plugdev"
+    ATTR{idVendor}=="1443", MODE="0660", GROUP="plugdev"
   '';
 
   #   swapDevices = [];
@@ -285,6 +290,7 @@ in {
     virt-viewer
     orca-slicer
     r2modman
+    usbutils
 
     # python packages
     (python313.withPackages (ps:
