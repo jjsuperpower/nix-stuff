@@ -291,6 +291,7 @@ in {
     orca-slicer
     r2modman
     usbutils
+    androidenv.androidPkgs.platform-tools
 
     # python packages
     (python313.withPackages (ps:
