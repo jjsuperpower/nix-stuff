@@ -9,7 +9,10 @@
   ...
 }: let
   arcMaxMiB = 512;
-  stablePkgs = import inputs.nixpkgs-stable {system = "x86_64-linux";};
+  stablePkgs = import inputs.nixpkgs-stable {
+    system = "x86_64-linux";
+    config.allowUnfree = true;
+  };
 
   # get latest kernel package that is compatible with zfs
   zfsCompatibleKernelPackages = lib.filterAttrs (
@@ -50,9 +53,26 @@ in {
   };
 
   boot.kernelParams = ["nohibernate" "zfs.zfs_arc_max=8884901888" "amdgpu.ppfeaturemask=0xffffffff"];
-  boot.initrd.postMountCommands = lib.mkAfter ''
-    zfs rollback -r zroot/root@blank;
-  '';
+  boot.initrd.systemd.services.zfsRollback = {
+    description = "Rollback ZFS datasets to a pristine state";
+    wantedBy = [
+      "initrd.target"
+    ]; 
+    after = [
+      "zfs-import-zroot.service"
+    ];
+    before = [ 
+      "sysroot.mount"
+    ];
+    path = with pkgs; [
+      zfs
+    ];
+    unitConfig.DefaultDependencies = "no";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.zfs}/bin/zfs rollback -r zroot/root@blank";
+    };
+  };
 
   fileSystems = {
     "/" = {
@@ -218,23 +238,15 @@ in {
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    kdePackages.discover # Optional: Install if you use Flatpak or fwupd firmware update sevice
-    kdePackages.kcalc # Calculator
-    kdePackages.kcharselect # Tool to select and copy special characters from all installed fonts
-    kdePackages.kcolorchooser # A small utility to select a color
-    kdePackages.kolourpaint # Easy-to-use paint program
-    kdePackages.ksystemlog # KDE SystemLog Application
-    kdePackages.sddm-kcm # Configuration module for SDDM
-    kdiff3 # Compares and merges 2 or 3 files or directories
-    kdePackages.isoimagewriter # Optional: Program to write hybrid ISO files onto USB disks
-    kdePackages.partitionmanager # Optional Manage the disk devices, partitions and file systems on your computer
-    hardinfo2 # System information and benchmarks for Linux systems
-    haruna # Open source video player built with Qt/QML and libmpv
-    wayland-utils # Wayland utilities
-    wl-clipboard # Command-line copy/paste utilities for Wayland
-    networkmanager-openvpn
-    kdePackages.wallpaper-engine-plugin
+
+    #### System utilities ####
+    sudo-rs
+    lm_sensors
+    cryptsetup
+
+    #### terminal stuff ####
+    starship
+    rio
 
     # fish stuff
     fishPlugins.done
@@ -245,55 +257,32 @@ in {
     fishPlugins.grc
     grc
 
-    # terminal stuff
-    starship
-
-    git
+    # rust utilities
+    bat
+    rip2
+    ripgrep
+    zellij
     jujutsu
-    wget
-    discord-canary
-    htop
-    krita
-    zed-editor
-    obsidian
-    meld
-    vscode
-    corectrl
-    flatpak
-    gparted
-    gnome-disk-utility
-    gparted
-    rustup
-    gcc
-    glib
-    lm_sensors
-    coolercontrol.coolercontrol-gui
-    coolercontrol.coolercontrold
-    prometheus-nvidia-gpu-exporter
-    peek
-    cheese
-    kicad
-    freecad-wayland
-    spotify
-    cryptsetup
-    sudo-rs
-    zsh
-    alejandra
+
+    # Must haves
+    vim
+    helix
+    git
     pre-commit
-    qidi-slicer-bin
-    evince
-    cargo-generate
-    chromium
-    dnsutils
-    signal-desktop
-    onlyoffice-desktopeditors
-    virt-viewer
-    orca-slicer
-    r2modman
+    wget
+    htop
+    btop
+    rustup
+
+    # misc
+    file
     usbutils
+    dnsutils
+    zfs-prune-snapshots
+    alejandra
     androidenv.androidPkgs.platform-tools
 
-    # python packages
+    #### python packages ####
     (python313.withPackages (ps:
       with ps; [
         pip
@@ -309,6 +298,56 @@ in {
         jupyterlab
       ]))
 
+    #### GUI Applications ####
+
+    # kde stuff
+    kdePackages.discover # Optional: Install if you use Flatpak or fwupd firmware update sevice
+    kdePackages.kcalc # Calculator
+    kdePackages.kcharselect # Tool to select and copy special characters from all installed fonts
+    kdePackages.kcolorchooser # A small utility to select a color
+    kdePackages.kolourpaint # Easy-to-use paint program
+    kdePackages.ksystemlog # KDE SystemLog Application
+    kdePackages.sddm-kcm # Configuration module for SDDM
+    kdiff3 # Compares and merges 2 or 3 files or directories
+    kdePackages.isoimagewriter # Optional: Program to write hybrid ISO files onto USB disks
+    kdePackages.partitionmanager # Optional Manage the disk devices, partitions and file systems on your computer
+    wayland-utils # Wayland utilities
+    wl-clipboard # Command-line copy/paste utilities for Wayland
+    networkmanager-openvpn
+    kdePackages.wallpaper-engine-plugin
+    
+    # other applications
+    hardinfo2 # System information and benchmarks for Linux systems
+    haruna # Open source video player built with Qt/QML and libmpv
+    krita
+    zed-editor
+    obsidian
+    meld
+    vscode
+    corectrl
+    flatpak
+    gparted
+    gnome-disk-utility
+    gparted
+    coolercontrol.coolercontrol-gui
+    coolercontrol.coolercontrold
+    peek
+    cheese
+    kicad
+    freecad-wayland
+    evince
+    cargo-generate
+    chromium
+    signal-desktop
+    onlyoffice-desktopeditors
+    virt-viewer
+    orca-slicer
+    r2modman
+
+    # non-free apps
+    discord
+    # spotify   # spotify download is broken at the moment
+
     # stable packages
     stablePkgs.darktable
     stablePkgs.prismlauncher
@@ -316,6 +355,7 @@ in {
   ];
 
   # exclude packages
+  # I don't need to search for files, balboo is a resource hog
   environment.plasma6.excludePackages = [pkgs.kdePackages.baloo];
 
   # sudo stuff
