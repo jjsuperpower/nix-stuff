@@ -346,7 +346,7 @@ in {
 
     # non-free apps
     discord
-    # spotify   # spotify download is broken at the moment
+    spotify
 
     # stable packages
     stablePkgs.darktable
