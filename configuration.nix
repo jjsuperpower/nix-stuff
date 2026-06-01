@@ -74,6 +74,8 @@ in {
     };
   };
 
+  boot.zfs.forceImportRoot = false;
+
   fileSystems = {
     "/" = {
       device = "zroot/root";
