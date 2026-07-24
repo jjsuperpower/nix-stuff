@@ -3,7 +3,7 @@
     disk = {
       root = {
         type = "disk";
-        device = "/dev/disk/by-id/nvme-WDC_WDS960G2G0C-00AJM0_21284M800995";
+        device = "/dev/mmcblk0";
         content = {
           type = "gpt";
           partitions = {
@@ -18,7 +18,7 @@
               };
             };
             encryptedSwap = {
-              size = "16G";
+              size = "6G";
               content = {
                 type = "swap";
                 randomEncryption = true;
@@ -53,15 +53,6 @@
         options.ashift = "12";
 
         datasets = {
-          "reserved" = {
-            # keep zfs performance good
-            type = "zfs_fs";
-            options = {
-              mountpoint = "none";
-              reservation = "100GiB";
-            };
-          };
-
           "root" = {
             type = "zfs_fs";
             options.mountpoint = "none";
@@ -84,7 +75,10 @@
 
           "system/nix" = {
             type = "zfs_fs";
-            options.mountpoint = "legacy";
+            options = {
+              mountpoint = "legacy";
+              dedup = "on";
+            };
             mountpoint = "/nix";
           };
 

@@ -9,10 +9,6 @@
   ...
 }: let
   arcMaxMiB = 512;
-  stablePkgs = import inputs.nixpkgs-stable {
-    system = "x86_64-linux";
-    config.allowUnfree = true;
-  };
 
   # get latest kernel package that is compatible with zfs
   zfsCompatibleKernelPackages = lib.filterAttrs (
@@ -38,7 +34,7 @@ in {
   boot.kernelPackages = latestKernelPackage;
 
   # zfs mount stuff
-  networking.hostId = "e321370e";
+  networking.hostId = "9695e88e"; # regenerate with: head -c4 /dev/urandom | od -A none -t x4 | tr -d ' '
   boot.loader.grub = {
     enable = true;
     zfsSupport = true;
@@ -52,7 +48,7 @@ in {
     ];
   };
 
-  boot.kernelParams = ["nohibernate" "zfs.zfs_arc_max=8884901888" "amdgpu.ppfeaturemask=0xffffffff"];
+  boot.kernelParams = ["nohibernate" "zfs.zfs_arc_max=${toString (arcMaxMiB * 1024 * 1024)}"];
   boot.initrd.systemd.services.zfsRollback = {
     description = "Rollback ZFS datasets to a pristine state";
     wantedBy = [
@@ -84,15 +80,6 @@ in {
     };
     "/persistent".neededForBoot = true;
     "/var/log".neededForBoot = true;
-    "/games" = {
-      device = "games";
-      fsType = "zfs";
-      neededForBoot = false;
-      options = [
-        "users"
-        "nofail"
-      ];
-    };
   };
 
   services.udev.extraRules = ''
@@ -137,10 +124,9 @@ in {
   # Enable OpenGL
   hardware.graphics = {
     enable = true;
-    enable32Bit = true;
   };
 
-  networking.hostName = "enterprise"; # Define your hostname.
+  networking.hostName = "TenForward"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -150,9 +136,6 @@ in {
   # Enable networking
   networking.networkmanager.enable = true;
   systemd.network.wait-online.enable = false; # Disable wait-online, as it can cause issues with NetworkManager
-  networking.networkmanager.plugins = with pkgs; [
-    networkmanager-openvpn
-  ];
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -176,20 +159,15 @@ in {
   # You can disable this if you're only using the Wayland session.
   #services.xserver.enable = true;
 
-  services.displayManager.sddm.wayland.enable = true;
-
-  # Enable the KDE Plasma     Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  # Enable the COSMIC Desktop Environment.
+  services.desktopManager.cosmic.enable = true;
+  services.displayManager.cosmic-greeter.enable = true;
 
   # Configure keymap in X    11
   services.xserver.xkb = {
     layout = "us";
     variant = "";
   };
-
-  # Enable CUPS to print     documents.
-  services.printing.enable = true;
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
@@ -207,14 +185,6 @@ in {
     #media-session.enable = true;
   };
 
-  # vpn stuff
-  services.openvpn.servers = {
-    bitbyteVPN = {
-      config = ''config bitbyte.ovpn '';
-      autoStart = false;
-    };
-  };
-
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -225,10 +195,7 @@ in {
     description = "jon";
     extraGroups = ["networkmanager" "wheel" "docker" "plugdev" "dialout"];
     shell = pkgs.fish;
-    packages = with pkgs; [
-      kdePackages.kate
-      #  thunderbird
-    ];
+    packages = [];
   };
 
   # Install firefox.
@@ -243,14 +210,17 @@ in {
 
     #### System utilities ####
     sudo-rs
-    lm_sensors
     cryptsetup
 
-    #### terminal stuff ####
-    starship
+    #### Terminal emulators ####
+    ghostty
     rio
 
-    # fish stuff
+    #### Shell and prompt ####
+    starship
+    nushell
+
+    # fish plugins
     fishPlugins.done
     fishPlugins.fzf-fish
     fishPlugins.forgit
@@ -259,14 +229,14 @@ in {
     fishPlugins.grc
     grc
 
-    # rust utilities
+    #### Rust CLI utilities ####
     bat
     rip2
     ripgrep
     zellij
     jujutsu
 
-    # Must haves
+    #### Dev tools ####
     vim
     helix
     git
@@ -275,98 +245,44 @@ in {
     htop
     btop
     rustup
+    cargo-generate
+    nil
+    nixd
+    nixfmt
+    ruff
+    lldb
 
-    # misc
+    #### Misc system tools ####
     file
     usbutils
     dnsutils
     zfs-prune-snapshots
-    alejandra
-    androidenv.androidPkgs.platform-tools
 
-    #### python packages ####
+    #### Python ####
     (python313.withPackages (ps:
       with ps; [
         pip
         virtualenv
-        python-pipedrive
         requests
-        numpy
-        pandas
-        matplotlib
-        scikit-learn
-        scikit-image
-        scipy
-        jupyterlab
+        debugpy
       ]))
 
     #### GUI Applications ####
-
-    # kde stuff
-    kdePackages.discover # Optional: Install if you use Flatpak or fwupd firmware update sevice
-    kdePackages.kcalc # Calculator
-    kdePackages.kcharselect # Tool to select and copy special characters from all installed fonts
-    kdePackages.kcolorchooser # A small utility to select a color
-    kdePackages.kolourpaint # Easy-to-use paint program
-    kdePackages.ksystemlog # KDE SystemLog Application
-    kdePackages.sddm-kcm # Configuration module for SDDM
-    kdiff3 # Compares and merges 2 or 3 files or directories
-    kdePackages.isoimagewriter # Optional: Program to write hybrid ISO files onto USB disks
-    kdePackages.partitionmanager # Optional Manage the disk devices, partitions and file systems on your computer
-    wayland-utils # Wayland utilities
-    wl-clipboard # Command-line copy/paste utilities for Wayland
-    networkmanager-openvpn
-    kdePackages.wallpaper-engine-plugin
-    
-    # other applications
-    hardinfo2 # System information and benchmarks for Linux systems
-    haruna # Open source video player built with Qt/QML and libmpv
+    wayland-utils
+    wl-clipboard
+    hardinfo2
     krita
-    zed-editor
-    obsidian
     meld
-    vscode
-    corectrl
     flatpak
     gparted
     gnome-disk-utility
-    gparted
-    coolercontrol.coolercontrol-gui
-    coolercontrol.coolercontrold
-    peek
-    cheese
-    kicad
-    freecad-wayland
     evince
-    cargo-generate
     chromium
-    signal-desktop
-    onlyoffice-desktopeditors
-    virt-viewer
-    orca-slicer
-    r2modman
-
-    # non-free apps
-    discord
-    spotify
-
-    # stable packages
-    stablePkgs.darktable
-    stablePkgs.prismlauncher
-    stablePkgs.rustdesk-flutter
   ];
-
-  # exclude packages
-  # I don't need to search for files, balboo is a resource hog
-  environment.plasma6.excludePackages = [pkgs.kdePackages.baloo];
 
   # sudo stuff
   security.sudo-rs.enable = true;
   security.sudo.enable = false;
-
-  #cooler control
-  programs.coolercontrol.enable = true;
-  boot.kernelModules = ["nct6775" "lm75"]; # needed for sensors
 
   # flatpak
   services.flatpak.enable = true;
@@ -393,14 +309,6 @@ in {
   # docker
   virtualisation.docker.enable = true;
 
-  # steam install
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
-  };
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -426,19 +334,7 @@ in {
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.11"; # Did you read the comment?
-
-  environment.etc."sysconfig/lm_sensors".text = ''
-    # Generated by sensors-detect on Wed Jul  9 00:06:28 2025
-    # This file is sourced by /etc/init.d/lm_sensors and defines the modules to
-    # be loaded/unloaded.
-    #
-    # The format of this file is a shell script that simply defines variables:
-    # HWMON_MODULES for hardware monitoring driver modules, and optionally
-    # BUS_MODULES for any required bus driver module (for example for I2C or SPI).
-
-    HWMON_MODULES="lm75 nct6775"
-  '';
+  system.stateVersion = "26.05"; # Did you read the comment?
 
   # impermanence stuff
   #    security.sudo-rs.extraConfig = ''
@@ -455,7 +351,6 @@ in {
       "/var/lib/systemd/coredump"
       "/etc/NetworkManager/system-connections"
       "/var/lib/docker"
-      "/etc/coolercontrol/"
       "/var/lib/flatpak/"
     ];
     files = [

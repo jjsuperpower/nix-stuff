@@ -1,1 +1,0 @@
-nix run github:serokell/deploy-rs "path:.#$1"

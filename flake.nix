@@ -1,5 +1,5 @@
 {
-  description = "Enterprise nix config";
+  description = "TenForward nix config";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -16,14 +16,13 @@
 
   outputs = inputs @ {
     nixpkgs,
-    nixpkgs-stable,
     disko,
     nixos-facter-modules,
     impermanence,
     home-manager,
     ...
   }: {
-    nixosConfigurations.enterprise = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.tenforward = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         disko.nixosModules.disko
