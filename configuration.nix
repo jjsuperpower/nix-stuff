@@ -7,7 +7,8 @@
   lib,
   inputs,
   ...
-}: let
+}:
+let
   arcMaxMiB = 512;
 
   # get latest kernel package that is compatible with zfs
@@ -23,8 +24,12 @@
     )
   );
 
-in {
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+in
+{
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   imports = [
     ./disko.nix
     ./startup_sshkey.nix
@@ -42,22 +47,25 @@ in {
     efiInstallAsRemovable = true;
     mirroredBoots = [
       {
-        devices = ["nodev"];
+        devices = [ "nodev" ];
         path = "/boot";
       }
     ];
   };
 
-  boot.kernelParams = ["nohibernate" "zfs.zfs_arc_max=${toString (arcMaxMiB * 1024 * 1024)}"];
+  boot.kernelParams = [
+    "nohibernate"
+    "zfs.zfs_arc_max=${toString (arcMaxMiB * 1024 * 1024)}"
+  ];
   boot.initrd.systemd.services.zfsRollback = {
     description = "Rollback ZFS datasets to a pristine state";
     wantedBy = [
       "initrd.target"
-    ]; 
+    ];
     after = [
       "zfs-import-zroot.service"
     ];
-    before = [ 
+    before = [
       "sysroot.mount"
     ];
     path = with pkgs; [
@@ -190,14 +198,19 @@ in {
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-
-  users.groups.plugdev = {};    # stm32 programmer group
+  users.groups.plugdev = { }; # stm32 programmer group
   users.users.jon = {
     isNormalUser = true;
     description = "jon";
-    extraGroups = ["networkmanager" "wheel" "docker" "plugdev" "dialout"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+      "plugdev"
+      "dialout"
+    ];
     shell = pkgs.fish;
-    packages = [];
+    packages = [ ];
   };
 
   # Install firefox.
@@ -253,6 +266,7 @@ in {
     nixfmt
     ruff
     lldb
+    chromium
 
     #### Misc system tools ####
     file
@@ -261,13 +275,14 @@ in {
     zfs-prune-snapshots
 
     #### Python ####
-    (python313.withPackages (ps:
-      with ps; [
+    (python313.withPackages (
+      ps: with ps; [
         pip
         virtualenv
         requests
         debugpy
-      ]))
+      ]
+    ))
 
     #### GUI Applications ####
     wayland-utils
