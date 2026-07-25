@@ -34,7 +34,7 @@ in {
   boot.kernelPackages = latestKernelPackage;
 
   # zfs mount stuff
-  networking.hostId = "9695e88e"; # regenerate with: head -c4 /dev/urandom | od -A none -t x4 | tr -d ' '
+  networking.hostId = "8425e349"; # regenerate with: head -c4 /dev/urandom | od -A none -t x4 | tr -d ' '
   boot.loader.grub = {
     enable = true;
     zfsSupport = true;
@@ -70,7 +70,9 @@ in {
     };
   };
 
-  boot.zfs.forceImportRoot = false;
+  boot.zfs.forceImportRoot = true;
+
+  boot.initrd.systemd.emergencyAccess = true;
 
   fileSystems = {
     "/" = {
@@ -271,7 +273,6 @@ in {
     wayland-utils
     wl-clipboard
     hardinfo2
-    krita
     meld
     flatpak
     gparted
