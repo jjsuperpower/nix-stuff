@@ -263,6 +263,10 @@ in {
     bat
     rip2
     ripgrep
+    fd
+    eza
+    scc
+    zoxide
     zellij
     jujutsu
     helix

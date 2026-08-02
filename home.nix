@@ -18,6 +18,7 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = [
+
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
@@ -36,19 +37,28 @@
     # '')
   ];
 
+  programs.opencode = {
+    enable = true;
+
+    settings.disabled_providers = [
+      "open-web-ui"
+      "opencode"
+      "openai"
+      "lmstudio"
+      "lm-studio-l"
+    ];
+
+    settings.provider.biab = {
+      name = "BIAB";
+      npm = "@ai-sdk/openai-compatible";
+      options.baseURL = "https://ai.us1.boxinaboxstudios.com/v1";
+      models.auto.name = "Auto";
+    };
+  };
+
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
   };
 
   # Home Manager can also manage your environment variables through
@@ -101,8 +111,12 @@
       sudo = ''sudo '';
       tar-c = ''tar -zcvf '';
       tar-e = ''tar -zxvf '';
+      ls = ''eza'';
+      find = ''fd'';
     };
   };
+
+  programs.zoxide.enable = true;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
