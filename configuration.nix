@@ -265,6 +265,7 @@ in {
     ripgrep
     zellij
     jujutsu
+    helix
 
     # Must haves
     vim
@@ -345,6 +346,8 @@ in {
     virt-viewer
     orca-slicer
     r2modman
+    nmap
+
 
     # non-free apps
     discord

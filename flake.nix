@@ -12,6 +12,8 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    opencode.url = "github:anomalyco/opencode";
   };
 
   outputs = inputs @ {
@@ -25,12 +27,17 @@
   }: {
     nixosConfigurations.enterprise = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [
+    modules = [
         disko.nixosModules.disko
         impermanence.nixosModules.impermanence
         ./configuration.nix
         nixos-facter-modules.nixosModules.facter
         {config.facter.reportPath = ./facter.json;}
+        ({ pkgs, ... }: {
+          environment.systemPackages = [
+            inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.default
+          ];
+        })
 
         home-manager.nixosModules.home-manager {
           home-manager.useGlobalPkgs = true;
