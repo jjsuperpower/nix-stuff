@@ -248,7 +248,7 @@ in {
 
     #### terminal stuff ####
     starship
-    rio
+    ghostty
 
     # fish stuff
     fishPlugins.done
@@ -270,6 +270,7 @@ in {
     zellij
     jujutsu
     helix
+    nushell
 
     # Must haves
     vim
@@ -330,7 +331,6 @@ in {
     zed-editor
     obsidian
     meld
-    vscode
     corectrl
     flatpak
     gparted
@@ -351,6 +351,10 @@ in {
     orca-slicer
     r2modman
     nmap
+    darktable
+    prismlauncher
+    rustdesk-flutter
+    lmstudio
 
 
     # non-free apps
@@ -358,9 +362,7 @@ in {
     spotify
 
     # stable packages
-    stablePkgs.darktable
-    stablePkgs.prismlauncher
-    stablePkgs.rustdesk-flutter
+    stablePkgs.vscode
   ];
 
   # exclude packages
