@@ -355,6 +355,7 @@ in {
     prismlauncher
     rustdesk-flutter
     lmstudio
+    vscode
 
 
     # non-free apps
@@ -362,7 +363,7 @@ in {
     spotify
 
     # stable packages
-    stablePkgs.vscode
+    
   ];
 
   # exclude packages
