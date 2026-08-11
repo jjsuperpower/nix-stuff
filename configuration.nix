@@ -117,6 +117,12 @@ in {
     ATTR{idVendor}=="0403", ATTR{idProduct}=="6010", MODE="0660", GROUP="plugdev"
     ATTR{idVendor}=="0403", ATTR{idProduct}=="6014", MODE="0660", GROUP="plugdev"
     ATTR{idVendor}=="1443", MODE="0660", GROUP="plugdev"
+
+    # T1000-E SenseCap Meshcore device
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="239a", ATTRS{idProduct}=="8029", MODE="0660", GROUP="plugdev"
+
+    # Heltec V4
+    ATTRS{idVendor}=="303a", ATTRS{idProduct}=="0002", MODE="0660", GROUP="plugdev", TAG+="uaccess"
   '';
 
   #   swapDevices = [];
