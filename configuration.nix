@@ -147,6 +147,7 @@ in {
   };
 
   hardware.cpu.amd.ryzen-smu.enable = true;
+
   networking.hostName = "enterprise"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -298,6 +299,7 @@ in {
     androidenv.androidPkgs.platform-tools
 
     #### python packages ####
+    uv
     (python313.withPackages (ps:
       with ps; [
         pip
@@ -363,6 +365,7 @@ in {
     rustdesk-flutter
     lmstudio
     vscode
+    makemkv
 
 
     # non-free apps
@@ -383,7 +386,7 @@ in {
 
   #cooler control
   programs.coolercontrol.enable = true;
-  boot.kernelModules = ["nct6775" "lm75"]; # needed for sensors
+  boot.kernelModules = ["nct6775" "lm75" "sg"]; # needed for sensors
 
   # flatpak
   services.flatpak.enable = true;
