@@ -146,6 +146,7 @@ in {
     enable32Bit = true;
   };
 
+  hardware.cpu.amd.ryzen-smu.enable = true;
   networking.hostName = "enterprise"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
