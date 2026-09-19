@@ -17,24 +17,13 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = [
-
-    # # Adds the 'hello' command to your environment. It prints a friendly
-    # # "Hello, world!" when run.
-    # pkgs.hello
-
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
+  home.packages = with pkgs; [
+    nixfmt
+    nixd
+    rust-analyzer
+    rustfmt
+    ruff
+    lldb
   ];
 
   programs.opencode = {
@@ -78,19 +67,29 @@
   #  /etc/profiles/per-user/jon/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    EDITOR = "vim";
+    EDITOR = "hx";
     PATH = "$PATH:~/.cargo/bin/";
   };
 
   # Global shell aliases that work across all shells
   home.shellAliases = {
-    # You can add additional global aliases here if needed
+    # You can add additional global aliases if needed
   };
 
   programs.git = {
     enable = true;
     settings.user.name = "jjsuperpower";
     settings.user.email = "jjs29356@gmail.com";
+  };
+
+  programs.jujutsu = {
+    enable = true;
+    settings = {
+      jon = {
+        email = "jjs29356@gmail.com";
+        name = "jjsuperpower";
+      };
+    };
   };
 
   programs.starship = {
@@ -107,17 +106,49 @@
   programs.fish = {
     enable = true;
     shellAliases = {
-      zyp = ''zypper'';
-      sudo = ''sudo '';
-      tar-c = ''tar -zcvf '';
-      tar-e = ''tar -zxvf '';
-      ls = ''eza'';
-      find = ''fd'';
+      zyp = "zypper";
+      sudo = "sudo ";
+      tar-c = "tar -zcvf ";
+      tar-e = "tar -zxvf ";
+      ls = "eza";
+      find = "fd";
     };
   };
 
   programs.zoxide.enable = true;
 
-  # Let Home Manager install and manage itself.
+  programs.helix = {
+    enable = true;
+    settings = {
+      keys.insert.j.k = "normal_mode";
+      theme = "onedark";
+    };
+    languages.language = [
+      {
+        name = "nix";
+        auto-format = true;
+        formatter.command = "${pkgs.nixfmt}/bin/nixfmt";
+        language-servers = [ "nixd" ];
+      }
+      {
+        name = "rust";
+        auto-format = true;
+        formatter.command = "${pkgs.rustfmt}/bin/rustfmt";
+        language-servers = [ "rust-analyzer" ];
+      }
+      {
+        name = "python";
+        auto-format = true;
+        formatter.command = "${pkgs.ruff}/bin/ruff";
+        language-servers = [ "ruff" ];
+      }
+    ];
+    languages.language-server = {
+      nixd.command = "${pkgs.nixd}/bin/nixd";
+      rust-analyzer.command = "${pkgs.rust-analyzer}/bin/rust-analyzer";
+      ruff.command = "${pkgs.ruff}/bin/ruff";
+    };
+  };
+
   programs.home-manager.enable = true;
 }
