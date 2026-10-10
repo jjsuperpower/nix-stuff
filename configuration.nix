@@ -409,6 +409,7 @@ in
     vscode
     makemkv
     alsa-utils
+    pkgsRocm.llama-cpp
     # non-free apps
     discord
     spotify
