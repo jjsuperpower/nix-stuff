@@ -7,7 +7,8 @@
   lib,
   inputs,
   ...
-}: let
+}:
+let
   arcMaxMiB = 512;
   stablePkgs = import inputs.nixpkgs-stable {
     system = "x86_64-linux";
@@ -27,8 +28,12 @@
     )
   );
 
-in {
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+in
+{
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
   imports = [
     ./disko.nix
     ./startup_sshkey.nix
@@ -46,22 +51,26 @@ in {
     efiInstallAsRemovable = true;
     mirroredBoots = [
       {
-        devices = ["nodev"];
+        devices = [ "nodev" ];
         path = "/boot";
       }
     ];
   };
 
-  boot.kernelParams = ["nohibernate" "zfs.zfs_arc_max=8884901888" "amdgpu.ppfeaturemask=0xffffffff"];
+  boot.kernelParams = [
+    "nohibernate"
+    "zfs.zfs_arc_max=8884901888"
+    "amdgpu.ppfeaturemask=0xffffffff"
+  ];
   boot.initrd.systemd.services.zfsRollback = {
     description = "Rollback ZFS datasets to a pristine state";
     wantedBy = [
       "initrd.target"
-    ]; 
+    ];
     after = [
       "zfs-import-zroot.service"
     ];
-    before = [ 
+    before = [
       "sysroot.mount"
     ];
     path = with pkgs; [
@@ -147,6 +156,31 @@ in {
   };
 
   hardware.cpu.amd.ryzen-smu.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = false;
+  };
+  # hardware.pulseaudio.enable = true;
+
+  # services.pipewire.wireplumber.extraConfig = {
+  #   "99-amd-hdmi-split" = {
+  #     "monitor.alsa.rules" = [
+  #       {
+  #         matches = [
+  #           {
+  #             "device.name" = "alsa_card.pci-0000_0c_00.1";
+  #           }
+  #         ];
+  #         actions = {
+  #           update-props = {
+  #             "api.alsa.split-enable" = true;
+  #             "api.acp.auto-profile" = false;
+  #           };
+  #         };
+  #       }
+  #     ];
+  #   };
+  # };
 
   networking.hostName = "enterprise"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -206,6 +240,7 @@ in {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
+    wireplumber.enable = true;
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
@@ -218,7 +253,7 @@ in {
   # vpn stuff
   services.openvpn.servers = {
     bitbyteVPN = {
-      config = ''config bitbyte.ovpn '';
+      config = "config bitbyte.ovpn ";
       autoStart = false;
     };
   };
@@ -226,12 +261,17 @@ in {
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-
-  users.groups.plugdev = {};    # stm32 programmer group
+  users.groups.plugdev = { }; # stm32 programmer group
   users.users.jon = {
     isNormalUser = true;
     description = "jon";
-    extraGroups = ["networkmanager" "wheel" "docker" "plugdev" "dialout"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+      "plugdev"
+      "dialout"
+    ];
     shell = pkgs.fish;
     packages = with pkgs; [
       kdePackages.kate
@@ -300,8 +340,8 @@ in {
 
     #### python packages ####
     uv
-    (python313.withPackages (ps:
-      with ps; [
+    (python313.withPackages (
+      ps: with ps; [
         pip
         virtualenv
         python-pipedrive
@@ -313,7 +353,8 @@ in {
         scikit-image
         scipy
         jupyterlab
-      ]))
+      ]
+    ))
 
     #### GUI Applications ####
 
@@ -332,7 +373,7 @@ in {
     wl-clipboard # Command-line copy/paste utilities for Wayland
     networkmanager-openvpn
     kdePackages.wallpaper-engine-plugin
-    
+
     # other applications
     hardinfo2 # System information and benchmarks for Linux systems
     haruna # Open source video player built with Qt/QML and libmpv
@@ -364,21 +405,21 @@ in {
     prismlauncher
     rustdesk-flutter
     lmstudio
+
     vscode
     makemkv
-
-
+    alsa-utils
     # non-free apps
     discord
     spotify
 
     # stable packages
-    
+
   ];
 
   # exclude packages
   # I don't need to search for files, balboo is a resource hog
-  environment.plasma6.excludePackages = [pkgs.kdePackages.baloo];
+  environment.plasma6.excludePackages = [ pkgs.kdePackages.baloo ];
 
   # sudo stuff
   security.sudo-rs.enable = true;
@@ -386,7 +427,11 @@ in {
 
   #cooler control
   programs.coolercontrol.enable = true;
-  boot.kernelModules = ["nct6775" "lm75" "sg"]; # needed for sensors
+  boot.kernelModules = [
+    "nct6775"
+    "lm75"
+    "sg"
+  ]; # needed for sensors
 
   # flatpak
   services.flatpak.enable = true;
