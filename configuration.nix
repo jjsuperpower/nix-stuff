@@ -373,6 +373,7 @@ in
     wl-clipboard # Command-line copy/paste utilities for Wayland
     networkmanager-openvpn
     kdePackages.wallpaper-engine-plugin
+    kdePackages.filelight
 
     # other applications
     hardinfo2 # System information and benchmarks for Linux systems
@@ -405,6 +406,10 @@ in
     prismlauncher
     rustdesk-flutter
     lmstudio
+    ntfs3g
+    smartmontools
+    testdisk
+    restic
 
     vscode
     makemkv
@@ -474,6 +479,17 @@ in
   #   enable = true;
   #   enableSSHSupport = true;
   # };
+
+  # restic needs fusermount not fusermount3
+  # so just create a softlink
+  security.wrappers = {
+    fusermount = {
+      owner = "root";
+      group = "root";
+      setuid = true;
+      source = "${pkgs.fuse3}/bin/fusermount3";
+    };
+  };
 
   # List services that you want to enable:
 
