@@ -41,6 +41,7 @@ in
   ];
 
   boot.kernelPackages = latestKernelPackage;
+  boot.loader.grub.configurationLimit = 10;
 
   # zfs mount stuff
   networking.hostId = "e321370e";
