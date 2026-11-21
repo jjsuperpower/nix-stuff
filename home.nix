@@ -85,7 +85,7 @@
   programs.jujutsu = {
     enable = true;
     settings = {
-      jon = {
+      user = {
         email = "jjs29356@gmail.com";
         name = "jjsuperpower";
       };
